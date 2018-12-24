@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorMarvelRed</item>
+        <item name="colorPrimaryDark">@color/colorMarvelRed</item>
+        <item name="colorAccent">@color/colorLightGray</item>
+
+    </style>
+
+    <style name="MarvelStyle" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+    <style name="DarkPrimary">
+        <item name="colorPrimaryDark">@color/colorMarvelRed</item>
+    </style>
+    
+    <style name="TextAppearance.AppCompat.Title.ExpandedState">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorInvisible</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Title.CollapsedState">
+        <item name="android:textColor">@color/colorMarvelWhite</item>
+        <item name="android:fontFamily">Arial</item>
+    </style>
+
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="7dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title.CollapsedState"
+            app:contentScrim="@color/colorMarvelRed"
+            app:scrimAnimationDuration="300"
+
+            app:expandedTitleGravity="bottom|left"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title.ExpandedState"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="@string/characters_title">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/marvel_logo"
+                app:layout_collapseMode="parallax" />
+
+            <include layout="@layout/toolbar" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/characters_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

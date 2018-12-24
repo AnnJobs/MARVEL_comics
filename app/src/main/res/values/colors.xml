@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="colorMarvelRed">#b31200</color>
+    <color name="colorMarvelWhite">#fff</color>
+    <color name="colorMarvelDark">#141313</color>
+    <color name="colorInvisible">#00ffffff</color>
+    <color name="colorBlack">#ff000000</color>
+    <color name="colorLightGray">#88141313</color>
+    <color name="colorGrey">#333</color>
+    <color name="colorGreyForTextView">#707070</color>
+    <color name="picture_background">#99141313</color>
+    <color name="colorMarvelLightRed">#d4c4c4</color>
+</resources>
