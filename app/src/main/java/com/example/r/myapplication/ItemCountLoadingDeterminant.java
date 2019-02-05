@@ -9,10 +9,21 @@ public class ItemCountLoadingDeterminant {
     private int limit;
     private int extraOffset;
 
-    public ItemCountLoadingDeterminant() {
+    public ItemCountLoadingDeterminant(int startOffset) {
         startLimit = SpanCountDefinitor.getSpanCount() * 8;
         limit = SpanCountDefinitor.getSpanCount() * 5;
-        offset = startLimit;
+        if (startOffset == 0) {
+            offset = startLimit;
+            Log.d("offsets", "from start limit = " + offset);
+        } else {
+            offset = startOffset;
+            Log.d("offsets", "from start offset = " + offset);
+        }
+    }
+
+    public ItemCountLoadingDeterminant(int limit, int startOffset) {
+        this(startOffset);
+        startLimit = limit;
     }
 
     public int getStartLimit() {
@@ -20,8 +31,9 @@ public class ItemCountLoadingDeterminant {
     }
 
     public int getLimit() {
-        int curSpanCount = SpanCountDefinitor.getSpanCount();
         if (isSpanCountChanged()) {
+
+            int curSpanCount = SpanCountDefinitor.getSpanCount();
             int differenceBetweenSpans = offset % curSpanCount;
 
             limit = SpanCountDefinitor.getSpanCount() * 5;
@@ -30,16 +42,21 @@ public class ItemCountLoadingDeterminant {
             return differenceBetweenSpans + limit;
         }
         extraOffset = 0;
-        limit = SpanCountDefinitor.getSpanCount() * 5;
         return limit;
     }
 
+    public int checkOffset(){
+        return offset;
+    }
+
     public int getOffset() {
+        Log.i("aaa", "offset1 = " + offset);
         offset += limit;
         offset += extraOffset;
-        Log.i("aaa", "offset = " + offset);
         return offset - limit - extraOffset;
     }
+
+
 
     private boolean isSpanCountChanged() {
         return (limit / 5) != (SpanCountDefinitor.getSpanCount());

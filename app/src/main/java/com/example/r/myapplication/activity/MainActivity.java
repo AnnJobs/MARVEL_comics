@@ -9,9 +9,10 @@ import android.util.Log;
 import com.example.r.myapplication.Listeners.OnBackPressedListener;
 import com.example.r.myapplication.R;
 import com.example.r.myapplication.fragment.CharacterFragment;
-import com.example.r.myapplication.fragment.CharacterListFragment;
+import com.example.r.myapplication.fragment.MainListFragment;
+import com.example.r.myapplication.loaders.listLoaders.ListLoader;
 
-public class MainActivity extends FragmentActivity implements CharacterListFragment.SelectedCharacterIdListener {
+public class MainActivity extends FragmentActivity implements MainListFragment.SelectedCharacterIdListener {
 
     private static final String TAG_FRAGMENT_LIST = "fragment_list";
     private static final String TAG_CHARACTER_INFO_FRAGMENT = "character_info_fragment";
@@ -28,13 +29,12 @@ public class MainActivity extends FragmentActivity implements CharacterListFragm
         charFragment = fm.findFragmentById(R.id.character_container);
 
         if (charFragment == null) {
-            charFragment = CharacterListFragment.newInstance();
+            charFragment = MainListFragment.newInstance(ListLoader.CHARACTER_TYPE);
             fm.beginTransaction()
                     .addToBackStack(TAG_FRAGMENT_LIST)
                     .add(R.id.character_container, charFragment)
                     .commit();
         }
-
     }
 
     @Override

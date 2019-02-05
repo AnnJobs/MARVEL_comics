@@ -5,7 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 
 public class CharacterGridLayoutManager extends GridLayoutManager {
 
-    ItemTypeListener listener;
+    private ItemTypeListener listener;
 
     public CharacterGridLayoutManager(Context context, int spanCount, ItemTypeListener listener){
         super(context, spanCount);

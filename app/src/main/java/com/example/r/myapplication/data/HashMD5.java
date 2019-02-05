@@ -4,9 +4,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashMD5 {
+class HashMD5 {
 
-    public static String hash(String string) {
+    static String hash(String string) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(string.getBytes());
@@ -15,7 +15,7 @@ public class HashMD5 {
             String md5hex = bigInteger.toString(16);
 
             while (md5hex.length()<32){
-                md5hex = "0" + md5hex;
+                md5hex = "0".concat(md5hex);
             }
 
             return md5hex;

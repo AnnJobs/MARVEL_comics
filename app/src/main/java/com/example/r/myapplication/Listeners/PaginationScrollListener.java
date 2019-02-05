@@ -4,14 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ProgressBar;
-
-import com.example.r.myapplication.fragment.CharacterListFragment;
-import com.example.r.myapplication.loaders.CharactersLoader;
 
 public class PaginationScrollListener extends RecyclerView.OnScrollListener {
 
-    int prevFirstItem = 0;
+    private int prevFirstItem = 0;
 
     private final Listener listener;
 
