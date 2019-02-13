@@ -10,5 +10,6 @@
     <string name="back_button">back</string>
     <string name="character_title">character</string>
     <string name="comics">Comics</string>
+    <string name="no_description">No Description</string>
 
 </resources>

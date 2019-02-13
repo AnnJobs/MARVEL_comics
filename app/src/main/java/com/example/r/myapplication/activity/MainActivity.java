@@ -12,7 +12,7 @@ import com.example.r.myapplication.fragment.CharacterFragment;
 import com.example.r.myapplication.fragment.MainListFragment;
 import com.example.r.myapplication.loaders.listLoaders.ListLoader;
 
-public class MainActivity extends FragmentActivity implements MainListFragment.SelectedCharacterIdListener {
+public class MainActivity extends FragmentActivity implements MainListFragment.SelectedItemIdListener, CharacterFragment.ListSelectedListener {
 
     private static final String TAG_FRAGMENT_LIST = "fragment_list";
     private static final String TAG_CHARACTER_INFO_FRAGMENT = "character_info_fragment";
@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
     }
 
     @Override
-    public void onSelectedCharacterId(int id) {
+    public void onSelectedItemId(int id) {
         onIdWasReceived(id);
     }
 
@@ -48,10 +48,22 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
 
     private void addCharacterInfoFragment(int id) {
         Fragment fragment = CharacterFragment.newInstance(id);
+        ((CharacterFragment) fragment).setListeners(new CharacterFragment.ListSelectedListener() {
+            @Override
+            public void loadWholeList(int dataType, int id) {
+
+            }
+        }, new MainListFragment.SelectedItemIdListener() {
+            @Override
+            public void onSelectedItemId(int id) {
+
+            }
+        });
         fm.beginTransaction()
                 .replace(R.id.character_container, fragment)
                 .addToBackStack(null)
                 .commit();
+
     }
 
     @Override
@@ -75,4 +87,8 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
         }
     }
 
+    @Override
+    public void loadWholeList(int dataType, int id) {
+
+    }
 }

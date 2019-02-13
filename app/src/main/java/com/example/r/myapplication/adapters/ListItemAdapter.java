@@ -33,13 +33,15 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
 
 
     private static SelectedItemIdListener selectedItemIdListener;
+    private static NextButtonListener nextButtonListener;
 
     public ListItemAdapter(SelectedItemIdListener fragmentListener) {
         selectedItemIdListener = fragmentListener;
     }
 
-    public ListItemAdapter(SelectedItemIdListener fragmentListener, int limit) {
+    public ListItemAdapter(SelectedItemIdListener fragmentListener, NextButtonListener buttonListener, int limit) {
         this(fragmentListener);
+        nextButtonListener = buttonListener;
         this.limit = limit;
     }
 
@@ -119,7 +121,6 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
 
     static class ItemViewHolder<T extends LoadingObject> extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private View itemView;
         private TextView textViewStr;
         private ImageView itemImage;
         private int id;
@@ -128,7 +129,6 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
             super(itemView);
             textViewStr = itemView.findViewById(R.id.item_text);
             itemImage = itemView.findViewById(R.id.item_image);
-            this.itemView = itemView;
 
             itemView.setOnClickListener(this);
         }
@@ -171,10 +171,16 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
         }
     }
 
-    static class NextViewHolder extends RecyclerView.ViewHolder {
+    static class NextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public NextViewHolder(@NonNull View itemView) {
+        NextViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.findViewById(R.id.next_button).setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            nextButtonListener.onNextButtonPressed();
         }
     }
 
@@ -192,5 +198,9 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
 
     public interface SelectedItemIdListener {
         void onSelectedItemId(int charId);
+    }
+
+    public interface NextButtonListener {
+        void onNextButtonPressed();
     }
 }

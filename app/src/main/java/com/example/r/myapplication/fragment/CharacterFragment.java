@@ -60,6 +60,9 @@ public class CharacterFragment extends Fragment {
 
     private static int curId;
 
+    private ListSelectedListener listSelectedListener;
+    private MainListFragment.SelectedItemIdListener selectedItemIdListener;
+
 
     public static CharacterFragment newInstance(int charId) {
         Bundle args = new Bundle();
@@ -68,6 +71,11 @@ public class CharacterFragment extends Fragment {
         CharacterFragment characterFragment = new CharacterFragment();
         characterFragment.setArguments(args);
         return characterFragment;
+    }
+
+    public void setListeners(ListSelectedListener listSelectedListener, MainListFragment.SelectedItemIdListener selectedItemIdListener){
+        this.selectedItemIdListener = selectedItemIdListener;
+        this.listSelectedListener = listSelectedListener;
     }
 
     @Nullable
@@ -118,7 +126,7 @@ public class CharacterFragment extends Fragment {
         eventsLoader.loadItems();
     }
 
-    private boolean hasItemNotLoaded(){
+    private boolean hasItemNotLoaded() {
         return characterImage.getDrawable() == null;
     }
 
@@ -130,7 +138,7 @@ public class CharacterFragment extends Fragment {
         }
         characterName.setText(characterInfo.name);
         if (characterInfo.description.equals("")) {
-            characterDescription.setText("No Description");
+            characterDescription.setText(getString(R.string.no_description));
         } else {
             characterDescription.setText(characterInfo.description);
         }
@@ -163,23 +171,29 @@ public class CharacterFragment extends Fragment {
         recyclerViewEvents.addItemDecoration(decorator);
     }
 
-    private void initSeriesRV(final View view){
+    private void initSeriesRV(final View view) {
 
         seriesAdapter = new ListItemAdapter<>(new ListItemAdapter.SelectedItemIdListener() {
             @Override
             public void onSelectedItemId(int charId) {
+
+            }
+        }, new ListItemAdapter.NextButtonListener() {
+            @Override
+            public void onNextButtonPressed() {
+                listSelectedListener.loadWholeList(ListLoader.SERIES_TYPE, curId);
             }
         }, SpanCountDefinitor.getSpanCount() * 2);
 
 
-        seriesLoader = new ListLoader<>(new ListLoader.Listener<Series>(){
+        seriesLoader = new ListLoader<>(new ListLoader.Listener<Series>() {
             @Override
             public void setData(List<Series> list, boolean isEnd) {
-                if (list.size() == 0 && recyclerViewSeries != null){
+                if (list.size() == 0 && recyclerViewSeries != null) {
                     recyclerViewSeries.setVisibility(View.GONE);
                     view.findViewById(R.id.no_series_text_view).setVisibility(View.VISIBLE);
                 } else {
-                    if (seriesAdapter != null){
+                    if (seriesAdapter != null) {
                         seriesAdapter.setItems(list);
                         if (isEnd) seriesAdapter.listEnded();
                     }
@@ -191,23 +205,28 @@ public class CharacterFragment extends Fragment {
         recyclerViewSeries.setAdapter(seriesAdapter);
     }
 
-    private void initComicsRV(final View view){
+    private void initComicsRV(final View view) {
 
         comicsAdapter = new ListItemAdapter<>(new ListItemAdapter.SelectedItemIdListener() {
             @Override
             public void onSelectedItemId(int charId) {
             }
-        }, SpanCountDefinitor.getSpanCount() * 2);
+        }, new ListItemAdapter.NextButtonListener() {
+            @Override
+            public void onNextButtonPressed() {
+                listSelectedListener.loadWholeList(ListLoader.COMICS_TYPE, curId);
+            }
+        },SpanCountDefinitor.getSpanCount() * 2);
 
         comicsLoader = new ListLoader<>(new ListLoader.Listener<Comics>() {
             @Override
             public void setData(List<Comics> list, boolean isEnd) {
-                if (list.size() == 0 && recyclerViewComics != null){
+                if (list.size() == 0 && recyclerViewComics != null) {
                     Log.d("recycler", "rv gone ");
                     recyclerViewComics.setVisibility(View.GONE);
                     view.findViewById(R.id.no_comics_text_view).setVisibility(View.VISIBLE);
                 } else {
-                    if (comicsAdapter != null){
+                    if (comicsAdapter != null) {
                         comicsAdapter.setItems(list);
                         if (isEnd) comicsAdapter.listEnded();
                     }
@@ -220,21 +239,26 @@ public class CharacterFragment extends Fragment {
 
     }
 
-    private void initEventsRV(final View view){
+    private void initEventsRV(final View view) {
         eventsAdapter = new ListItemAdapter<>(new ListItemAdapter.SelectedItemIdListener() {
             @Override
             public void onSelectedItemId(int charId) {
             }
-        }, SpanCountDefinitor.getSpanCount() * 2);
+        }, new ListItemAdapter.NextButtonListener() {
+            @Override
+            public void onNextButtonPressed() {
+                listSelectedListener.loadWholeList(ListLoader.EVENTS_TYPE, curId);
+            }
+        },SpanCountDefinitor.getSpanCount() * 2);
 
         eventsLoader = new ListLoader<>(new ListLoader.Listener<Events>() {
             @Override
             public void setData(List<Events> list, boolean isEnd) {
-                if (list.size() == 0 && recyclerViewEvents != null){
+                if (list.size() == 0 && recyclerViewEvents != null) {
                     recyclerViewEvents.setVisibility(View.GONE);
                     view.findViewById(R.id.no_events_text_view).setVisibility(View.VISIBLE);
                 } else {
-                    if (eventsAdapter != null){
+                    if (eventsAdapter != null) {
                         eventsAdapter.setItems(list);
                         if (isEnd) eventsAdapter.listEnded();
                     }
@@ -288,5 +312,9 @@ public class CharacterFragment extends Fragment {
         recyclerViewComics = null;
         comicsAdapter = null;
         comicsLoader = null;
+    }
+
+    public interface ListSelectedListener {
+        void loadWholeList(int dataType, int id);
     }
 }
