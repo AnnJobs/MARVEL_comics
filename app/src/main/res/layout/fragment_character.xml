@@ -45,7 +45,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                app:cardCornerRadius="76dp">
+                app:cardCornerRadius="5dp">
 
                 <ImageView
                     android:id="@+id/character_info_image"

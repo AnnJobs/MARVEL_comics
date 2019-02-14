@@ -65,12 +65,13 @@ public class ListLoader<T extends LoadingObject> {
         this.searchedName = searchedName;
     }
 
-    protected void load(int limit, int offset) {
+    private void load(int limit, int offset) {
         if (searchedName != null) {
             loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, searchedName, marvelService.getApi()).enqueue(newCallback());
-
+            Log.d("fragpr", "load: wrong call");
         } else if (characterId != 0) {
             loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, characterId, marvelService.getApi()).enqueue(newCallback());
+            Log.d("fragpr", "load: right call");
         } else {
             loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, marvelService.getApi()).enqueue(newCallback());
         }

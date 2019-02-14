@@ -61,7 +61,7 @@ public class CharacterFragment extends Fragment {
     private static int curId;
 
     private ListSelectedListener listSelectedListener;
-    private MainListFragment.SelectedItemIdListener selectedItemIdListener;
+    private GeneralListFragment.SelectedItemIdListener selectedItemIdListener;
 
 
     public static CharacterFragment newInstance(int charId) {
@@ -73,14 +73,16 @@ public class CharacterFragment extends Fragment {
         return characterFragment;
     }
 
-    public void setListeners(ListSelectedListener listSelectedListener, MainListFragment.SelectedItemIdListener selectedItemIdListener){
+    public void setListeners(ListSelectedListener listSelectedListener,
+                             GeneralListFragment.SelectedItemIdListener selectedItemIdListener){
         this.selectedItemIdListener = selectedItemIdListener;
         this.listSelectedListener = listSelectedListener;
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_character, container, false);
     }
 
@@ -93,11 +95,12 @@ public class CharacterFragment extends Fragment {
             curId = args.getInt(ARG_CHARACTER_ID);
         }
 
-
         initialiseViews(view);
         buildToolbar();
 
-        if (savedInstanceState == null || savedInstanceState.getString("CHARACTER_NAME") == null || savedInstanceState.getParcelable("CHARACTER_IMAGE") == null) {
+        if (savedInstanceState == null ||
+                savedInstanceState.getString("CHARACTER_NAME") == null ||
+                savedInstanceState.getParcelable("CHARACTER_IMAGE") == null) {
 
             InfoLoader loader = new InfoLoader(new InfoLoader.Listener() {
                 @Override
@@ -134,7 +137,8 @@ public class CharacterFragment extends Fragment {
         if (Const.IMAGE_NOT_FOUND_PATH.equals(characterInfo.charImage.imgPath)) {
             characterImage.setImageResource(R.drawable.no_photo);
         } else {
-            Picasso.get().load(characterInfo.charImage.imgPath + "." + characterInfo.charImage.extension).into(characterImage);
+            Picasso.get().load(characterInfo.charImage.imgPath + "."
+                    + characterInfo.charImage.extension).into(characterImage);
         }
         characterName.setText(characterInfo.name);
         if (characterInfo.description.equals("")) {
@@ -199,9 +203,11 @@ public class CharacterFragment extends Fragment {
                     }
                 }
             }
-        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2, 0), curId, ListLoader.SERIES_TYPE);
+        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2,
+                0), curId, ListLoader.SERIES_TYPE);
 
-        recyclerViewSeries.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewSeries.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
         recyclerViewSeries.setAdapter(seriesAdapter);
     }
 
@@ -232,10 +238,12 @@ public class CharacterFragment extends Fragment {
                     }
                 }
             }
-        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2, 0), curId, ListLoader.COMICS_TYPE);
+        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2, 0)
+                , curId, ListLoader.COMICS_TYPE);
 
         recyclerViewComics.setAdapter(comicsAdapter);
-        recyclerViewComics.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewComics.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -264,10 +272,12 @@ public class CharacterFragment extends Fragment {
                     }
                 }
             }
-        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2, 0), curId, ListLoader.EVENTS_TYPE);
+        }, new ItemCountLoadingDeterminant(SpanCountDefinitor.getSpanCount() * 2,
+                0), curId, ListLoader.EVENTS_TYPE);
 
         recyclerViewEvents.setAdapter(eventsAdapter);
-        recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -291,7 +301,8 @@ public class CharacterFragment extends Fragment {
         if (scrollView.getVisibility() == View.VISIBLE || !hasItemNotLoaded()) {
             outState.putString("CHARACTER_NAME", characterName.getText().toString());
             outState.putString("CHARACTER_DESCRIPTION", characterDescription.getText().toString());
-            outState.putParcelable("CHARACTER_IMAGE", ((BitmapDrawable) characterImage.getDrawable()).getBitmap());
+            outState.putParcelable("CHARACTER_IMAGE", ((BitmapDrawable) characterImage
+                    .getDrawable()).getBitmap());
         }
     }
 
@@ -300,8 +311,10 @@ public class CharacterFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             characterName.setText(savedInstanceState.getString("CHARACTER_NAME"));
-            characterDescription.setText(savedInstanceState.getString("CHARACTER_DESCRIPTION"));
-            characterImage.setImageBitmap((Bitmap) savedInstanceState.getParcelable("CHARACTER_IMAGE"));
+            characterDescription.setText(savedInstanceState
+                    .getString("CHARACTER_DESCRIPTION"));
+            characterImage.setImageBitmap((Bitmap) savedInstanceState
+                    .getParcelable("CHARACTER_IMAGE"));
 
         }
     }
@@ -316,5 +329,11 @@ public class CharacterFragment extends Fragment {
 
     public interface ListSelectedListener {
         void loadWholeList(int dataType, int id);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        
     }
 }

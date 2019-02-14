@@ -30,7 +30,9 @@ import com.example.r.myapplication.model.LoadingObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainListFragment<T extends LoadingObject> extends Fragment implements OnBackPressedListener {
+public class GeneralListFragment<T extends LoadingObject> extends Fragment implements OnBackPressedListener {
+
+    protected static final String ARG_DATA_TYPE = "data_type";
 
     private List<T> items = new ArrayList<>();
     private List<T> savedItems = new ArrayList<>();
@@ -50,19 +52,22 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
     private AppBarLayout appBarLayout;
     private ListLoader.Listener loaderListener;
 
-    private static int itemsType;
-    private static int chrId;
+    protected static int itemsType;
 
 
-    public static MainListFragment newInstance(int dataType) {
-        itemsType = dataType;
-        return new MainListFragment<>();
+    public static GeneralListFragment newInstance(int dataType) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_DATA_TYPE, dataType);
+
+        GeneralListFragment gListFragment = new GeneralListFragment<>();
+        gListFragment.setArguments(args);
+        return gListFragment;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MainListFragment.SelectedItemIdListener) {
+        if (context instanceof GeneralListFragment.SelectedItemIdListener) {
             listener = (SelectedItemIdListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement SelectedItemIdListener");
@@ -84,13 +89,15 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        unpackingArguments(getArguments());
+
         initialiseViews(view);
 
         initialiseAdapter();
         initialiseLayoutManager();
 
         if (loader == null) {
-            loader = new ListLoader<>(getListLoaderListener(), itemsType);
+            initListLoader();
         }
 
         fillInRecyclerView();
@@ -120,7 +127,12 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
         appBarLayout = view.findViewById(R.id.app_bar);
     }
 
-    private ListLoader.Listener<T> getListLoaderListener() {
+    protected void unpackingArguments(Bundle args){
+        if (args != null && args.containsKey(ARG_DATA_TYPE))
+        itemsType = args.getInt(ARG_DATA_TYPE);
+    }
+
+    protected ListLoader.Listener<T> getListLoaderListener() {
 
         if (loaderListener != null) return loaderListener;
 
@@ -181,7 +193,7 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
         recyclerView.addItemDecoration(new Decorator(1));
     }
 
-    private void inflateMenu() {
+    protected void inflateMenu() {
         toolbar.inflateMenu(R.menu.toolbar_menu_list);
 
         searchItem = toolbar.getMenu().findItem(R.id.search);
@@ -197,7 +209,7 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
                 } else {
                     toNewList();
                 }
-                loader = new ListLoader<>(getListLoaderListener(), s, itemsType);
+                initListLoader(s);
                 isMainList = false;
                 loader.loadItems();
 
@@ -233,6 +245,18 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
         items.clear();
     }
 
+    protected void initListLoader(){
+        loader = new ListLoader<>(getListLoaderListener(), itemsType);
+    }
+
+    private void initListLoader(String s){
+        loader = new ListLoader<>(getListLoaderListener(), s, itemsType);
+    }
+
+    protected void setLoader(ListLoader<T> listLoader){
+        loader = listLoader;
+    }
+
     @Override
     public void onBackPressed() {
 
@@ -262,6 +286,7 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (searchView != null)
         searchView.clearFocus();
 
     }
@@ -269,7 +294,6 @@ public class MainListFragment<T extends LoadingObject> extends Fragment implemen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        chrId = 0;
         itemsType = 0;
     }
 }

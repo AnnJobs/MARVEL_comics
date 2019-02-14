@@ -9,10 +9,13 @@ import android.util.Log;
 import com.example.r.myapplication.Listeners.OnBackPressedListener;
 import com.example.r.myapplication.R;
 import com.example.r.myapplication.fragment.CharacterFragment;
-import com.example.r.myapplication.fragment.MainListFragment;
+import com.example.r.myapplication.fragment.ChosenListFragment;
+import com.example.r.myapplication.fragment.GeneralListFragment;
 import com.example.r.myapplication.loaders.listLoaders.ListLoader;
+import com.example.r.myapplication.model.Characters;
+import com.example.r.myapplication.model.Comics;
 
-public class MainActivity extends FragmentActivity implements MainListFragment.SelectedItemIdListener, CharacterFragment.ListSelectedListener {
+public class MainActivity extends FragmentActivity implements GeneralListFragment.SelectedItemIdListener{
 
     private static final String TAG_FRAGMENT_LIST = "fragment_list";
     private static final String TAG_CHARACTER_INFO_FRAGMENT = "character_info_fragment";
@@ -29,7 +32,7 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
         charFragment = fm.findFragmentById(R.id.character_container);
 
         if (charFragment == null) {
-            charFragment = MainListFragment.newInstance(ListLoader.CHARACTER_TYPE);
+            charFragment = GeneralListFragment.newInstance(ListLoader.CHARACTER_TYPE);
             fm.beginTransaction()
                     .addToBackStack(TAG_FRAGMENT_LIST)
                     .add(R.id.character_container, charFragment)
@@ -51,9 +54,13 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
         ((CharacterFragment) fragment).setListeners(new CharacterFragment.ListSelectedListener() {
             @Override
             public void loadWholeList(int dataType, int id) {
-
+                ChosenListFragment<Comics> frag = ChosenListFragment.newInstance(dataType, id);
+                fm.beginTransaction()
+                        .addToBackStack(TAG_FRAGMENT_LIST)
+                        .add(R.id.character_container, frag)
+                        .commit();
             }
-        }, new MainListFragment.SelectedItemIdListener() {
+        }, new GeneralListFragment.SelectedItemIdListener() {
             @Override
             public void onSelectedItemId(int id) {
 
@@ -85,10 +92,5 @@ public class MainActivity extends FragmentActivity implements MainListFragment.S
                 super.onBackPressed();
             }
         }
-    }
-
-    @Override
-    public void loadWholeList(int dataType, int id) {
-
     }
 }
