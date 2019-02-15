@@ -50,14 +50,16 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
     }
 
     private void addCharacterInfoFragment(int id) {
-        Fragment fragment = CharacterFragment.newInstance(id);
+        final Fragment fragment = CharacterFragment.newInstance(id);
         ((CharacterFragment) fragment).setListeners(new CharacterFragment.ListSelectedListener() {
             @Override
             public void loadWholeList(int dataType, int id) {
-                ChosenListFragment<Comics> frag = ChosenListFragment.newInstance(dataType, id);
+
+                fm.beginTransaction().hide(fragment).commit();
+                charFragment = ChosenListFragment.<Comics>newInstance(dataType, id);
                 fm.beginTransaction()
                         .addToBackStack(TAG_FRAGMENT_LIST)
-                        .add(R.id.character_container, frag)
+                        .add(R.id.character_container, charFragment)
                         .commit();
             }
         }, new GeneralListFragment.SelectedItemIdListener() {
@@ -82,7 +84,6 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
         if (curFragment instanceof OnBackPressedListener && !((OnBackPressedListener) curFragment).needToExit()) {
             ((OnBackPressedListener) curFragment).onBackPressed();
         } else {
-
             Log.i("FRAGMENTS", "count = " + fragmentsInStack);
             if (fragmentsInStack > 1) {
                 getSupportFragmentManager().popBackStack();
@@ -91,6 +92,11 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
             } else {
                 super.onBackPressed();
             }
+        }
+
+        if (fragmentsInStack > 2) {
+            Fragment prevFragment = fm.getFragments().get(fm.getFragments().size() - 2);
+            if (prevFragment.isHidden()) fm.beginTransaction().show(prevFragment).commit();
         }
     }
 }

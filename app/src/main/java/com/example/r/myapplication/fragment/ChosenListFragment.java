@@ -3,7 +3,6 @@ package com.example.r.myapplication.fragment;
 import android.os.Bundle;
 
 import com.example.r.myapplication.loaders.listLoaders.ListLoader;
-import com.example.r.myapplication.model.Comics;
 import com.example.r.myapplication.model.LoadingObject;
 
 public class ChosenListFragment<T extends LoadingObject> extends GeneralListFragment<T> {
@@ -12,12 +11,12 @@ public class ChosenListFragment<T extends LoadingObject> extends GeneralListFrag
 
     private int chrId;
 
-    public static ChosenListFragment newInstance(int dataType, int chrId){
+    public static <T extends LoadingObject> ChosenListFragment newInstance(int dataType, int chrId){
         Bundle args = new Bundle();
         args.putInt(ARG_DATA_TYPE, dataType);
         args.putInt(ARG_CHARACTER_ID, chrId);
 
-        ChosenListFragment<Comics> chosenListFragment = new ChosenListFragment<>();
+        ChosenListFragment<T> chosenListFragment = new ChosenListFragment<>();
         chosenListFragment.setArguments(args);
         return chosenListFragment;
     }

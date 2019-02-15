@@ -331,9 +331,4 @@ public class CharacterFragment extends Fragment {
         void loadWholeList(int dataType, int id);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        
-    }
 }
