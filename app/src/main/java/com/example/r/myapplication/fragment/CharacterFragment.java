@@ -61,7 +61,6 @@ public class CharacterFragment extends Fragment {
     private static int curId;
 
     private ListSelectedListener listSelectedListener;
-    private ListSelectedListener listSelectedListener2;
     private GeneralListFragment.SelectedItemIdListener selectedItemIdListener;
 
 
@@ -78,7 +77,6 @@ public class CharacterFragment extends Fragment {
                              GeneralListFragment.SelectedItemIdListener selectedItemIdListener){
         this.selectedItemIdListener = selectedItemIdListener;
         this.listSelectedListener = listSelectedListener;
-        this.listSelectedListener2 = listSelectedListener;
 
     }
 
@@ -188,7 +186,7 @@ public class CharacterFragment extends Fragment {
         }, new ListItemAdapter.NextButtonListener() {
             @Override
             public void onNextButtonPressed() {
-                listSelectedListener2.loadWholeList(ListLoader.SERIES_TYPE, curId);
+                listSelectedListener.loadWholeList(ListLoader.SERIES_TYPE, curId);
             }
         }, SpanCountDefinitor.getSpanCount() * 2);
 
