@@ -61,6 +61,7 @@ public class CharacterFragment extends Fragment {
     private static int curId;
 
     private ListSelectedListener listSelectedListener;
+    private ListSelectedListener listSelectedListener2;
     private GeneralListFragment.SelectedItemIdListener selectedItemIdListener;
 
 
@@ -77,6 +78,8 @@ public class CharacterFragment extends Fragment {
                              GeneralListFragment.SelectedItemIdListener selectedItemIdListener){
         this.selectedItemIdListener = selectedItemIdListener;
         this.listSelectedListener = listSelectedListener;
+        this.listSelectedListener2 = listSelectedListener;
+
     }
 
     @Nullable
@@ -185,9 +188,10 @@ public class CharacterFragment extends Fragment {
         }, new ListItemAdapter.NextButtonListener() {
             @Override
             public void onNextButtonPressed() {
-                listSelectedListener.loadWholeList(ListLoader.SERIES_TYPE, curId);
+                listSelectedListener2.loadWholeList(ListLoader.SERIES_TYPE, curId);
             }
         }, SpanCountDefinitor.getSpanCount() * 2);
+
 
 
         seriesLoader = new ListLoader<>(new ListLoader.Listener<Series>() {
@@ -283,7 +287,6 @@ public class CharacterFragment extends Fragment {
 
     private void buildToolbar() {
         try {
-
             toolbar.setNavigationIcon(R.drawable.back_red);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -317,14 +320,6 @@ public class CharacterFragment extends Fragment {
                     .getParcelable("CHARACTER_IMAGE"));
 
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        recyclerViewComics = null;
-        comicsAdapter = null;
-        comicsLoader = null;
     }
 
     public interface ListSelectedListener {

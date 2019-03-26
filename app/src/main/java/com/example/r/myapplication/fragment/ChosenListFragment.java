@@ -1,6 +1,7 @@
 package com.example.r.myapplication.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.r.myapplication.loaders.listLoaders.ListLoader;
 import com.example.r.myapplication.model.LoadingObject;
@@ -24,6 +25,7 @@ public class ChosenListFragment<T extends LoadingObject> extends GeneralListFrag
     @Override
     protected void initListLoader() {
         setLoader(new ListLoader<>(getListLoaderListener(), chrId, itemsType));
+        Log.d("types", "initListLoader: " + itemsType);
     }
 
     @Override
@@ -34,12 +36,7 @@ public class ChosenListFragment<T extends LoadingObject> extends GeneralListFrag
         if (args != null && args.containsKey(ARG_CHARACTER_ID) && args.containsKey(ARG_DATA_TYPE)) {
             chrId = args.getInt(ARG_CHARACTER_ID);
             itemsType = args.getInt(ARG_DATA_TYPE);
+            Log.d("types", "unpackingArguments: " + itemsType);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        chrId = 0;
     }
 }

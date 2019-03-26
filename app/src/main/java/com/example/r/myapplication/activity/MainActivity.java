@@ -55,11 +55,11 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
             @Override
             public void loadWholeList(int dataType, int id) {
 
-                fm.beginTransaction().hide(fragment).commit();
                 charFragment = ChosenListFragment.<Comics>newInstance(dataType, id);
+                Log.d("types", "loadWholeList: " + dataType);
                 fm.beginTransaction()
-                        .addToBackStack(TAG_FRAGMENT_LIST)
-                        .add(R.id.character_container, charFragment)
+                        .replace(R.id.character_container, charFragment)
+                        .addToBackStack(null)
                         .commit();
             }
         }, new GeneralListFragment.SelectedItemIdListener() {
@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
         });
         fm.beginTransaction()
                 .replace(R.id.character_container, fragment)
-                .addToBackStack(null)
+                .addToBackStack(TAG_CHARACTER_INFO_FRAGMENT)
                 .commit();
 
     }
@@ -81,7 +81,8 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
         int fragmentsInStack = fm.getBackStackEntryCount();
         Fragment curFragment = fm.getFragments().get(fm.getFragments().size() - 1);
 
-        if (curFragment instanceof OnBackPressedListener && !((OnBackPressedListener) curFragment).needToExit()) {
+        if (curFragment instanceof OnBackPressedListener && !((OnBackPressedListener) curFragment)
+                .needToExit()) {
             ((OnBackPressedListener) curFragment).onBackPressed();
         } else {
             Log.i("FRAGMENTS", "count = " + fragmentsInStack);
@@ -94,9 +95,5 @@ public class MainActivity extends FragmentActivity implements GeneralListFragmen
             }
         }
 
-        if (fragmentsInStack > 2) {
-            Fragment prevFragment = fm.getFragments().get(fm.getFragments().size() - 2);
-            if (prevFragment.isHidden()) fm.beginTransaction().show(prevFragment).commit();
-        }
     }
 }

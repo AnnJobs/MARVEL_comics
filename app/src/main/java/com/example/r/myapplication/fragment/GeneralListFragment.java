@@ -52,7 +52,7 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
     private AppBarLayout appBarLayout;
     private ListLoader.Listener loaderListener;
 
-    protected static int itemsType;
+    protected int itemsType;
 
 
     public static GeneralListFragment newInstance(int dataType) {
@@ -291,9 +291,4 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        itemsType = 0;
-    }
 }
