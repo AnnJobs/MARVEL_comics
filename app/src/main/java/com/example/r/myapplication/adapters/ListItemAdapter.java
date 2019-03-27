@@ -32,8 +32,8 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
     private int itemResource;
 
 
-    private static SelectedItemIdListener selectedItemIdListener;
-    private static NextButtonListener nextButtonListener;
+    private SelectedItemIdListener selectedItemIdListener;
+    private NextButtonListener nextButtonListener;
 
     public ListItemAdapter(SelectedItemIdListener fragmentListener) {
         selectedItemIdListener = fragmentListener;
@@ -59,10 +59,10 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         if (i == ITEM_TYPE) {
             Log.d("adapter", "onCreateViewHolder: item");
-            return new ItemViewHolder<T>(LayoutInflater.from(viewGroup.getContext()).inflate(itemResource, viewGroup, false));
+            return new ItemViewHolder<T>(LayoutInflater.from(viewGroup.getContext()).inflate(itemResource, viewGroup, false), selectedItemIdListener);
         } else if (i == NEXT_BUTTON_TYPE) {
             Log.d("adasdaf", "getItemViewType: next1");
-            return new NextViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_next, viewGroup, false));
+            return new NextViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_next, viewGroup, false), nextButtonListener);
         } else {
             Log.d("adapter", "onCreateViewHolder: progressBar");
             return new ProgressBarHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.progress_bar, viewGroup, false));
@@ -116,7 +116,6 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
         itemList.clear();
         notifyDataSetChanged();
         isEnd = false;
-        Log.d("prb", "clear: " + isEnd);
     }
 
     static class ItemViewHolder<T extends LoadingObject> extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -125,8 +124,12 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
         private ImageView itemImage;
         private int id;
 
-        ItemViewHolder(@NonNull View itemView) {
+        private SelectedItemIdListener selectedItemIdListener;
+
+        ItemViewHolder(@NonNull View itemView, SelectedItemIdListener listener) {
             super(itemView);
+            selectedItemIdListener = listener;
+
             textViewStr = itemView.findViewById(R.id.item_text);
             itemImage = itemView.findViewById(R.id.item_image);
 
@@ -161,8 +164,8 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
     }
 
     static class ProgressBarHolder extends RecyclerView.ViewHolder {
-        ProgressBar progressBar;
-        View item;
+        private ProgressBar progressBar;
+        private View item;
 
         ProgressBarHolder(View view) {
             super(view);
@@ -173,8 +176,11 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
 
     static class NextViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        NextViewHolder(@NonNull View itemView) {
+        private NextButtonListener nextButtonListener;
+
+        NextViewHolder(@NonNull View itemView, NextButtonListener listener) {
             super(itemView);
+            nextButtonListener = listener;
             itemView.findViewById(R.id.next_button).setOnClickListener(this);
         }
 
