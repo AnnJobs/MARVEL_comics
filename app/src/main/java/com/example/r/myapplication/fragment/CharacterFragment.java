@@ -41,6 +41,8 @@ public class CharacterFragment extends Fragment {
     private ImageView characterImage;
     private TextView characterName;
     private TextView characterDescription;
+    private InfoLoader infoLoader;
+    CharacterInfo info;
 
     private ScrollView scrollView;
     private LinearLayout progressBarLayout;
@@ -74,7 +76,7 @@ public class CharacterFragment extends Fragment {
     }
 
     public void setListeners(ListSelectedListener listSelectedListener,
-                             GeneralListFragment.SelectedItemIdListener selectedItemIdListener){
+                             GeneralListFragment.SelectedItemIdListener selectedItemIdListener) {
         this.selectedItemIdListener = selectedItemIdListener;
         this.listSelectedListener = listSelectedListener;
 
@@ -90,48 +92,70 @@ public class CharacterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("yyyy", "onViewCreated: called");
         Bundle args = getArguments();
         if (!(args == null) && args.containsKey(ARG_CHARACTER_ID)) {
             curId = args.getInt(ARG_CHARACTER_ID);
         }
 
-        initialiseViews(view);
-        buildToolbar();
+        if (isNewInstance()) {
 
-        if (savedInstanceState == null ||
-                savedInstanceState.getString("CHARACTER_NAME") == null ||
-                savedInstanceState.getParcelable("CHARACTER_IMAGE") == null) {
+            initialiseViews(view);
+            buildToolbar();
 
-            InfoLoader loader = new InfoLoader(new InfoLoader.Listener() {
+            Log.d("wwww", "onViewCreated: " + isNewInstance());
+            if (savedInstanceState == null ||
+                    savedInstanceState.getString("CHARACTER_NAME") == null ||
+                    savedInstanceState.getParcelable("CHARACTER_IMAGE") == null) {
+
+                initInfoLoader();
+                infoLoader.loadInfo(curId);
+
+                initRecyclerView(view);
+
+                comicsLoader.loadItems();
+                seriesLoader.loadItems();
+                eventsLoader.loadItems();
+
+            } else {
+                if (scrollView.getVisibility() == View.GONE) {
+                    progressBarLayout.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d("wwww", "onStart: ");
+
+    }
+
+    private boolean hasItemNotLoaded() {
+        return characterImage.getDrawable() == null;
+    }
+
+    private boolean isNewInstance() {
+        return eventsAdapter == null;
+    }
+
+    private void initInfoLoader() {
+        if (infoLoader == null) {
+            infoLoader = new InfoLoader(new InfoLoader.Listener() {
                 @Override
                 public void addCharacterInfoIntoFragment(CharacterInfo characterInfo) {
                     if (scrollView.getVisibility() == View.GONE) {
                         progressBarLayout.setVisibility(View.GONE);
                         scrollView.setVisibility(View.VISIBLE);
                     }
+                    info = characterInfo;
                     bindData(characterInfo);
-
                 }
             });
-
-            loader.loadInfo(curId);
-        } else {
-            if (scrollView.getVisibility() == View.GONE) {
-                progressBarLayout.setVisibility(View.GONE);
-                scrollView.setVisibility(View.VISIBLE);
-            }
         }
-
-        initRecyclerView(view);
-
-        comicsLoader.loadItems();
-        seriesLoader.loadItems();
-        eventsLoader.loadItems();
-    }
-
-    private boolean hasItemNotLoaded() {
-        return characterImage.getDrawable() == null;
     }
 
     private void bindData(CharacterInfo characterInfo) {
@@ -150,17 +174,19 @@ public class CharacterFragment extends Fragment {
     }
 
     private void initialiseViews(View view) {
-        characterImage = view.findViewById(R.id.character_info_image);
-        characterName = view.findViewById(R.id.character_info_name);
-        characterDescription = view.findViewById(R.id.character_info_description);
-        scrollView = view.findViewById(R.id.char_info_scroll_view);
-        progressBarLayout = view.findViewById(R.id.progress_bar_info);
-        toolbar = view.findViewById(R.id.toolbar_for_character_info);
+        if (isNewInstance()) {
+            characterImage = view.findViewById(R.id.character_info_image);
+            characterName = view.findViewById(R.id.character_info_name);
+            characterDescription = view.findViewById(R.id.character_info_description);
+            scrollView = view.findViewById(R.id.char_info_scroll_view);
+            progressBarLayout = view.findViewById(R.id.progress_bar_info);
+            toolbar = view.findViewById(R.id.toolbar_for_character_info);
 
-        recyclerViewComics = view.findViewById(R.id.comics_recycler_view);
-        recyclerViewSeries = view.findViewById(R.id.series_recycler_view);
-        recyclerViewEvents = view.findViewById(R.id.events_recycler_view);
-        Log.d("recycler", "initialiseViews: ");
+            recyclerViewComics = view.findViewById(R.id.comics_recycler_view);
+            recyclerViewSeries = view.findViewById(R.id.series_recycler_view);
+            recyclerViewEvents = view.findViewById(R.id.events_recycler_view);
+            Log.d("recycler", "initialiseViews: ");
+        }
     }
 
     private void initRecyclerView(final View view) {
@@ -186,11 +212,11 @@ public class CharacterFragment extends Fragment {
         }, new ListItemAdapter.NextButtonListener() {
             @Override
             public void onNextButtonPressed() {
-                listSelectedListener.loadWholeList(ListLoader.SERIES_TYPE, curId);
+                if (listSelectedListener != null) {
+                    listSelectedListener.loadWholeList(ListLoader.SERIES_TYPE, curId);
+                } else Log.d("Exceptions", "CharacterFragment: Series Next listener is null");
             }
         }, SpanCountDefinitor.getSpanCount() * 2);
-
-
 
         seriesLoader = new ListLoader<>(new ListLoader.Listener<Series>() {
             @Override
@@ -222,9 +248,11 @@ public class CharacterFragment extends Fragment {
         }, new ListItemAdapter.NextButtonListener() {
             @Override
             public void onNextButtonPressed() {
-                listSelectedListener.loadWholeList(ListLoader.COMICS_TYPE, curId);
+                if (listSelectedListener != null) {
+                    listSelectedListener.loadWholeList(ListLoader.COMICS_TYPE, curId);
+                } else Log.d("Exceptions", "CharacterFragment: Comics Next listener is null");
             }
-        },SpanCountDefinitor.getSpanCount() * 2);
+        }, SpanCountDefinitor.getSpanCount() * 2);
 
         comicsLoader = new ListLoader<>(new ListLoader.Listener<Comics>() {
             @Override
@@ -257,9 +285,11 @@ public class CharacterFragment extends Fragment {
         }, new ListItemAdapter.NextButtonListener() {
             @Override
             public void onNextButtonPressed() {
-                listSelectedListener.loadWholeList(ListLoader.EVENTS_TYPE, curId);
+                if (listSelectedListener != null) {
+                    listSelectedListener.loadWholeList(ListLoader.EVENTS_TYPE, curId);
+                } else Log.d("Exceptions", "CharacterFragment: Events Next listener is null");
             }
-        },SpanCountDefinitor.getSpanCount() * 2);
+        }, SpanCountDefinitor.getSpanCount() * 2);
 
         eventsLoader = new ListLoader<>(new ListLoader.Listener<Events>() {
             @Override
@@ -292,6 +322,7 @@ public class CharacterFragment extends Fragment {
                     getActivity().onBackPressed();
                 }
             });
+            Log.d("qqqq", "buildToolbar: done");
         } catch (NullPointerException e) {
             Log.e("CharacterFragment", "NullPointerException in onBackPressed");
         }
@@ -305,6 +336,7 @@ public class CharacterFragment extends Fragment {
             outState.putParcelable("CHARACTER_IMAGE", ((BitmapDrawable) characterImage
                     .getDrawable()).getBitmap());
         }
+        Log.d("eeeeee", "onSaveInstanceState: ");
     }
 
     @Override
@@ -318,6 +350,7 @@ public class CharacterFragment extends Fragment {
                     .getParcelable("CHARACTER_IMAGE"));
 
         }
+        Log.d("eeeeee", "onViewStateRestored: ");
     }
 
     public interface ListSelectedListener {
