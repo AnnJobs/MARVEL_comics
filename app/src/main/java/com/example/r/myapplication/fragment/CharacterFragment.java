@@ -333,8 +333,7 @@ public class CharacterFragment extends Fragment {
         if (scrollView.getVisibility() == View.VISIBLE || !hasItemNotLoaded()) {
             outState.putString("CHARACTER_NAME", characterName.getText().toString());
             outState.putString("CHARACTER_DESCRIPTION", characterDescription.getText().toString());
-            outState.putParcelable("CHARACTER_IMAGE", ((BitmapDrawable) characterImage
-                    .getDrawable()).getBitmap());
+
         }
         Log.d("eeeeee", "onSaveInstanceState: ");
     }
@@ -346,11 +345,22 @@ public class CharacterFragment extends Fragment {
             characterName.setText(savedInstanceState.getString("CHARACTER_NAME"));
             characterDescription.setText(savedInstanceState
                     .getString("CHARACTER_DESCRIPTION"));
-            characterImage.setImageBitmap((Bitmap) savedInstanceState
-                    .getParcelable("CHARACTER_IMAGE"));
 
         }
         Log.d("eeeeee", "onViewStateRestored: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("eeeeee", "onStop: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("eeeeee", "onDestroy: ");
+        infoLoader.cancelCall();
     }
 
     public interface ListSelectedListener {
