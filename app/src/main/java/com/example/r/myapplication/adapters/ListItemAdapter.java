@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 import com.example.r.myapplication.R;
 import com.example.r.myapplication.model.LoadingObject;
-import com.example.r.myapplication.model.Characters;
+import com.example.r.myapplication.model.lists.Characters;
 import com.example.r.myapplication.model.RepresentativeCover;
+import com.example.r.myapplication.model.lists.Comics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class ListItemAdapter<T extends LoadingObject> extends RecyclerView.Adapt
         this(fragmentListener);
         nextButtonListener = buttonListener;
         this.limit = limit;
+        Log.d("llllll", "ListItemAdapter: " );
     }
 
     public void setItems(List<T> items) {

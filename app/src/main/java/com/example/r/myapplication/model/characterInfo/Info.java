@@ -3,7 +3,7 @@ package com.example.r.myapplication.model.characterInfo;
 import com.example.r.myapplication.model.Image;
 import com.google.gson.annotations.SerializedName;
 
-public class CharacterInfo {
+public class Info {
 
     @SerializedName("characterId")
     public int characterId;

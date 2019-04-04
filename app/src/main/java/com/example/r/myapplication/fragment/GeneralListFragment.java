@@ -55,9 +55,9 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
     protected int itemsType;
 
 
-    public static GeneralListFragment newInstance(int dataType) {
+    public static GeneralListFragment newInstance(int listDataType) {
         Bundle args = new Bundle();
-        args.putInt(ARG_DATA_TYPE, dataType);
+        args.putInt(ARG_DATA_TYPE, listDataType);
 
         GeneralListFragment gListFragment = new GeneralListFragment<>();
         gListFragment.setArguments(args);
@@ -109,7 +109,7 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
             adapter.setItems(items);
             firstProgressBar.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            Log.d("problem", "had added in list");
+            Log.d("problem", "had added in listOfRecyclerView");
 
         }
 
@@ -171,7 +171,7 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
             adapter = new ListItemAdapter<>(new ListItemAdapter.SelectedItemIdListener() {
                 @Override
                 public void onSelectedItemId(int id) {
-                    listener.onSelectedItemId(id);
+                    listener.<T>onSelectedItemId(id, itemsType);
                     Log.i("prb", "clicked");
                 }
             });
@@ -280,7 +280,7 @@ public class GeneralListFragment<T extends LoadingObject> extends Fragment imple
     }
 
     public interface SelectedItemIdListener {
-        void onSelectedItemId(int id);
+        <T extends LoadingObject> void onSelectedItemId(int id, int itemType);
     }
 
     @Override

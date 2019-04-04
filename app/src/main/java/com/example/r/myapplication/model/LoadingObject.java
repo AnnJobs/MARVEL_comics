@@ -22,6 +22,9 @@ public abstract class LoadingObject {
 
         public abstract Call load(int limit, int offset, String searchedName, MarvelAPI api);
 
-        public abstract Call load(int limit, int offset, int characterId, MarvelAPI api);
+        public abstract Call loadListInItem(int limit, int offset, int itemType, //itemType - the type of main item (searched)
+                                            int itemId, MarvelAPI api);
+
+        public abstract Call loadInfo(int id, MarvelAPI api);
     }
 }

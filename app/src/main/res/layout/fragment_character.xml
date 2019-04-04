@@ -177,7 +177,7 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:textSize="16sp"
-                        android:text="series" />
+                        android:text="Series" />
 
                     <TextView
                         android:id="@+id/no_series_text_view"
@@ -203,51 +203,51 @@
 
             </android.support.v7.widget.CardView>
 
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:backgroundTint="@color/colorMarvelLightRed"-->
-                <!--android:paddingBottom="5dp"-->
-                <!--android:layout_marginBottom="12dp"-->
-                <!--app:cardCornerRadius="8dp">-->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorMarvelLightRed"
+                android:paddingBottom="5dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="8dp">
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:orientation="vertical">-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingStart="20dp"-->
-                        <!--android:paddingTop="5dp"-->
-                        <!--android:paddingBottom="5dp"-->
-                        <!--android:textSize="16sp"-->
-                        <!--android:text="stories" />-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textSize="16sp"
+                        android:text="Events" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/no_stories_text_view"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="80dp"-->
-                        <!--android:layout_marginTop="5dp"-->
-                        <!--android:layout_marginBottom="5dp"-->
-                        <!--android:text="No stories found"-->
-                        <!--android:visibility="gone" />-->
+                    <TextView
+                        android:id="@+id/no_events_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="No events found"
+                        android:visibility="gone" />
 
-                    <!--<android.support.v7.widget.RecyclerView-->
+                    <android.support.v7.widget.RecyclerView
 
-                        <!--android:id="@+id/stories_recycler_view"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingLeft="5dp"-->
-                        <!--android:paddingRight="5dp"-->
-                        <!--android:layout_marginBottom="5dp"-->
-                        <!--android:visibility="visible" />-->
+                        android:id="@+id/events_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:visibility="visible" />
 
-                <!--</LinearLayout>-->
+                </LinearLayout>
 
-            <!--</android.support.v7.widget.CardView>-->
+            </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -269,10 +269,10 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:textSize="16sp"
-                        android:text="events" />
+                        android:text="Characters" />
 
                     <TextView
-                        android:id="@+id/no_events_text_view"
+                        android:id="@+id/no_characters_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="80dp"
@@ -283,7 +283,7 @@
 
                     <android.support.v7.widget.RecyclerView
 
-                        android:id="@+id/events_recycler_view"
+                        android:id="@+id/characters_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"

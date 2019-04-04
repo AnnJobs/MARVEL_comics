@@ -1,5 +1,6 @@
-package com.example.r.myapplication.model;
+package com.example.r.myapplication.model.lists;
 
+import com.example.r.myapplication.model.LoadingObject;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

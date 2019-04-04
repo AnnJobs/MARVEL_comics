@@ -4,9 +4,7 @@ import android.util.Log;
 
 import com.example.r.myapplication.ItemCountLoadingDeterminant;
 import com.example.r.myapplication.data.MarvelService;
-import com.example.r.myapplication.model.Characters;
-import com.example.r.myapplication.model.Comics;
-import com.example.r.myapplication.model.ListResponse;
+import com.example.r.myapplication.model.lists.ListResponse;
 import com.example.r.myapplication.model.LoadingObject;
 import com.example.r.myapplication.model.LoadingObjectsManager;
 
@@ -18,62 +16,72 @@ import retrofit2.Response;
 
 public class ListLoader<T extends LoadingObject> {
 
-    public static final int CHARACTER_TYPE = 0;
+    public static final int CHARACTER_TYPE = 5;
     public static final int COMICS_TYPE = 1;
     public static final int EVENTS_TYPE = 2;
     public static final int SERIES_TYPE = 3;
+    public static final int CREATOR_TYPE = 4;
 
+    private Listener<T> listener;
+    private MarvelService marvelService = new MarvelService();
+    private ItemCountLoadingDeterminant itemCountLoadingDeterminant;
+    private LoadingObjectsManager loadingObjectsManager = new LoadingObjectsManager();
+
+    private String searchedName;
+    private int itemId;
+    private int listItemType;
     private int itemType;
 
-    Listener<T> listener;
-    MarvelService marvelService = new MarvelService();
-    ItemCountLoadingDeterminant itemCountLoadingDeterminant;
-    LoadingObjectsManager loadingObjectsManager = new LoadingObjectsManager();
-
-    String searchedName;
-    int characterId;
-
-    public ListLoader(Listener<T> listener, int itemType) {
-        this.itemType = itemType;
+    public ListLoader(Listener<T> listener, int listItemType) {
+        this.listItemType = listItemType;
         this.listener = listener;
         itemCountLoadingDeterminant = new ItemCountLoadingDeterminant(0);
     }
 
-    public ListLoader(Listener<T> listener, String searchedName, int itemType) {
-        this(listener, itemType);
+    public ListLoader(Listener<T> listener, String searchedName, int listItemType) {
+        this(listener, listItemType);
         this.searchedName = searchedName;
     }
 
-    public ListLoader(Listener<T> listener, int characterId, int itemType) {
-        this(listener, itemType);
-        this.characterId = characterId;
+    public ListLoader(Listener<T> listener, int itemType, int itemId, int listItemType) {
+        this(listener, listItemType);
+        this.itemId = itemId;
+        this.itemType = itemType;
+        Log.d("llllll", "ListLoader: ");
     }
 
-    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, int itemType) {
-        this.itemType = itemType;
+    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, int listItemType) {
+        this.listItemType = listItemType;
         this.listener = listener;
         this.itemCountLoadingDeterminant = itemCountLoadingDeterminant;
     }
 
-    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, int characterId, int itemType) {
-        this(listener, itemCountLoadingDeterminant, itemType);
-        this.characterId = characterId;
+    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, int itemType, int itemId, int listItemType) {
+        this(listener, itemCountLoadingDeterminant, listItemType);
+        this.itemId = itemId;
+        this.itemType = itemType;
     }
 
-    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, String searchedName, int itemType) {
-        this(listener, itemCountLoadingDeterminant, itemType);
+    public ListLoader(Listener<T> listener, ItemCountLoadingDeterminant itemCountLoadingDeterminant, String searchedName, int listItemType) {
+        this(listener, itemCountLoadingDeterminant, listItemType);
         this.searchedName = searchedName;
     }
 
     private void load(int limit, int offset) {
         if (searchedName != null) {
-            loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, searchedName, marvelService.getApi()).enqueue(newCallback());
-            Log.d("fragpr", "load: wrong call");
-        } else if (characterId != 0) {
-            loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, characterId, marvelService.getApi()).enqueue(newCallback());
-            Log.d("fragpr", "load: right call");
+            loadingObjectsManager.getLoadingObjectFactory(listItemType).load(limit, offset,
+                    searchedName, marvelService.getApi()).enqueue(newCallback());
+            Log.d("llllll", "searchName");
+        } else if (itemId != 0) {
+            Log.d("llllll", "load: " + itemType + "     " + listItemType);
+                loadingObjectsManager.getLoadingObjectFactory(listItemType).loadListInItem(limit,
+                        offset, itemType, itemId, marvelService.getApi()).enqueue(newCallback());
+
+
         } else {
-            loadingObjectsManager.getLoadingObjectFactory(itemType).load(limit, offset, marvelService.getApi()).enqueue(newCallback());
+            loadingObjectsManager.getLoadingObjectFactory(listItemType).load(limit, offset,
+                    marvelService.getApi()).enqueue(newCallback());
+            Log.d("llllll", "no way");
         }
     }
 
@@ -82,6 +90,7 @@ public class ListLoader<T extends LoadingObject> {
     }
 
     public void loadItems() {
+        Log.d("llllll", "loadItems: itemType = " + itemType + "   listType = " + listItemType);
         load(itemCountLoadingDeterminant.getStartLimit(), 0);
     }
 

@@ -1,5 +1,10 @@
 package com.example.r.myapplication.model;
 
+import com.example.r.myapplication.model.lists.Characters;
+import com.example.r.myapplication.model.lists.Comics;
+import com.example.r.myapplication.model.lists.Events;
+import com.example.r.myapplication.model.lists.Series;
+
 import static com.example.r.myapplication.loaders.listLoaders.ListLoader.CHARACTER_TYPE;
 import static com.example.r.myapplication.loaders.listLoaders.ListLoader.COMICS_TYPE;
 import static com.example.r.myapplication.loaders.listLoaders.ListLoader.EVENTS_TYPE;
